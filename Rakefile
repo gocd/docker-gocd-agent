@@ -32,7 +32,7 @@ end
       'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
       'apt-get update',
       'echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections',
-      'apt-get install -y unzip oracle-java8-installer git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip'
     ]
   },
   {
@@ -43,7 +43,7 @@ end
       'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
       'apt-get update',
       'echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections',
-      'apt-get install -y unzip oracle-java8-installer git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip'
     ]
   },
   {
@@ -53,7 +53,7 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu precise main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y unzip openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
     ]
   },
   {
@@ -63,7 +63,7 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y unzip openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
     ]
   },
   {
@@ -73,7 +73,7 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y unzip openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
     ]
   },
   {
