@@ -1,56 +1,14 @@
 # GoCD Agent Docker image
 
-Build [GoCD agent](https://www.gocd.io) images for several linux versions and distributions.
+This repository is the parent repository for https://github.com/gocd/docker-gocd-agent-centos-7, https://github.com/gocd/docker-gocd-agent-centos-6, https://github.com/gocd/docker-gocd-agent-ubuntu-16.04, https://github.com/gocd/docker-gocd-agent-ubuntu-14.04, https://github.com/gocd/docker-gocd-agent-ubuntu-12.04, https://github.com/gocd/docker-gocd-agent-debian-7, https://github.com/gocd/docker-gocd-agent-debian-8.
 
 # Usage
 
-Start the container with this:
+- Build docker image for different agent images by doing -
+`rake build_image`
 
-```
-docker run -p8153:8153 -p8154:8154 gocd/gocd-server
-```
-
-This will expose container ports 8153(http) and 8154(https) onto your server. You can now open http://localhost:8153 and https://localhost:8154
-
-# Available configuration options
-
-## Mounting volumes
-
-The GoCD server will store all configuration, pipeline history database, artifacts, plugins, and logs into `/godata`. If you'd like to provide secure credentials like SSH private keys among other things, you can mount `/home/go`
-
-```
-docker run -v /path/to/godata:/godata -v /path/to/home-dir:/home/go gocd/gocd-server
-```
-
-## Tweaking JVM options (memory, heap etc)
-
-JVM options can be tweaked using the environment variable `GO_SERVER_SYSTEM_PROPERTIES`.
-
-```
-docker run -e GO_SERVER_SYSTEM_PROPERTIES="-Xmx4096mb -Dfoo=bar" gocd/gocd-server
-```
-
-# Under the hood
-
-The GoCD server runs as the `go` user, the location of the various directories is:
-
-| Directory           | Description                                                                      |
-|---------------------|----------------------------------------------------------------------------------|
-| `/godata/addons`    | the directory where GoCD addons are stored                                       |
-| `/godata/artifacts` | the directory where GoCD artifacts are stored                                    |
-| `/godata/config`    | the directory where the GoCD configuration is store                              |
-| `/godata/db`        | the directory where the GoCD database and configuration change history is stored |
-| `/godata/logs`      | the directory where GoCD logs will be written out to                             |
-| `/godata/plugins`   | the directory containing GoCD plugins                                            |
-| `/home/go`          | the home directory for the GoCD server                                           |
-
-# Troubleshooting
-
-## The GoCD server does not come up
-
-- Check if the docker container is running `docker ps -a`
-- Check the STDOUT to see if there is any output that indicates failures `docker logs CONTAINER_ID`
-- Check the server logs `docker exec -it CONTAINER_ID tail -f /godata/logs/go-server.log` (or check the log file in the volume mount, if you're using one)
+- Publish or commit the Dockerfiles for the different agents by doing
+`rake publish`
 
 # License
 
