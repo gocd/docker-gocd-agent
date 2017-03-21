@@ -1,3 +1,17 @@
+# Copyright 2017 ThoughtWorks, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 require 'erb'
 require 'open-uri'
 require 'json'
@@ -19,8 +33,16 @@ def tini_assets
   @tini_assets ||= JSON.parse(open('https://api.github.com/repos/krallin/tini/releases/latest').read)['assets']
 end
 
+def gosu_assets
+  @gosu_assets ||= JSON.parse(open('https://api.github.com/repos/tianon/gosu/releases/latest').read)['assets']
+end
+
 def tini_url
   tini_assets.find { |asset| asset['browser_download_url'] =~ /tini-static-amd64$/ }['browser_download_url']
+end
+
+def gosu_url
+  gosu_assets.find { |asset| asset['browser_download_url'] =~ /gosu-amd64$/ }['browser_download_url']
 end
 
 [
@@ -32,7 +54,8 @@ end
       'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
       'apt-get update',
       'echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections',
-      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean'
     ]
   },
   {
@@ -43,7 +66,8 @@ end
       'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
       'apt-get update',
       'echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections',
-      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean'
     ]
   },
   {
@@ -53,7 +77,10 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu precise main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean',
+      # fix for https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
+      '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
     ]
   },
   {
@@ -63,7 +90,10 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean',
+      # fix for https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
+      '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
     ]
   },
   {
@@ -73,21 +103,26 @@ end
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
       'apt-get update',
-      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip'
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean'
     ]
   },
   {
     distro: 'centos',
     version: '6',
     before_install: [
-      'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip'
+      'yum update -y',
+      'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip',
+      'yum clean all'
     ]
   },
   {
     distro: 'centos',
     version: '7',
     before_install: [
-      'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip'
+      'yum update -y',
+      'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip',
+      'yum clean all'
     ]
   }
 ].each do |image|
@@ -107,7 +142,7 @@ end
     end
 
     task :init do
-      sh(%Q{git clone --quiet "#{repo_url}" #{dir_name}})
+      sh(%(git clone --quiet "#{repo_url}" #{dir_name}))
     end
 
     task :create_dockerfile do
@@ -123,7 +158,7 @@ end
         f.puts(readme_renderer.result(binding))
       end
 
-      cp("#{ROOT_DIR}/start-agent.sh", "#{dir_name}/start-agent.sh")
+      cp("#{ROOT_DIR}/docker-entrypoint.sh", "#{dir_name}/docker-entrypoint.sh")
       cp "#{ROOT_DIR}/LICENSE-2.0.txt", "#{dir_name}/LICENSE-2.0.txt"
     end
 
