@@ -84,7 +84,7 @@ if [ "$1" = '/go-agent/agent.sh' ]; then
     done
 
     setup_autoregister_properties_file "${AGENT_WORK_DIR}/config/autoregister.properties"
-	  try exec /usr/local/sbin/tini -- gosu go "$0" "$@" >> ${STDOUT_LOG_FILE} 2>&1
+	  try exec /usr/local/sbin/tini -- /usr/local/sbin/gosu go "$0" "$@" >> ${STDOUT_LOG_FILE} 2>&1
   fi
 fi
 
