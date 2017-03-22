@@ -62,12 +62,14 @@ end
     distro: 'debian',
     version: '8',
     before_install: [
-      "echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main' > /etc/apt/sources.list.d/webupd8team-java.list",
-      'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
+      "echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list",
       'apt-get update',
-      'echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections',
-      'apt-get install -y oracle-java8-installer git subversion mercurial openssh-client bash unzip',
-      'apt-get autoclean'
+      # see https://bugs.debian.org/775775
+      # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
+      'apt-get install -y openjdk-8-jre-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip',
+      'apt-get autoclean',
+      # see comment above
+      '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
     ]
   },
   {
