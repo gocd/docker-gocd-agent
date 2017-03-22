@@ -22,24 +22,25 @@ MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 
 ARG GOCD_VERSION="<%= gocd_version %>"
 ARG DOWNLOAD_URL="<%= download_url %>"
-ARG GID=1000
-ARG UID=1000
 
 ADD ${DOWNLOAD_URL} /tmp/go-agent.zip
-ADD <%= tini_url %> /usr/local/sbin/tini
-ADD <%= gosu_url %> /usr/local/sbin/gosu
-
+<% add_files.each do |file, meta| -%>
+ADD <%= meta[:url] %> <%= file %>
+<% end %>
 # allow mounting ssh keys, dotfiles, and the go server config and data
 VOLUME /home/go /godata
 
 # force encoding
 ENV LANG=en_US.utf8
 
-RUN chmod 755 /usr/local/sbin/tini /usr/local/sbin/gosu && \
+RUN \
+<% unless add_files.empty? -%>
+# add mode and permissions for files we added above
+  <%= add_files.collect {|file, meta| ["chmod #{meta[:mode]} #{file}", "chown #{meta[:owner]}:#{meta[:group]} #{file}"]}.flatten.join(" && \\\n  ") %> && \
+<% end -%>
 # add our user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
-  groupadd -g ${GID} go && \
-  useradd -u ${UID} -g go go && \
+  <%= create_user_and_group.join(" && \\ \n  ") -%> && \
   <%= before_install.join(" && \\ \n  ") -%> && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \

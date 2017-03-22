@@ -45,10 +45,22 @@ def gosu_url
   gosu_assets.find { |asset| asset['browser_download_url'] =~ /gosu-amd64$/ }['browser_download_url']
 end
 
+tini_and_gosu_add_file_meta = {
+  '/usr/local/sbin/tini' => { url: tini_url, mode: '0755', owner: 'root', group: 'root' },
+  '/usr/local/sbin/gosu' => { url: gosu_url, mode: '0755', owner: 'root', group: 'root' }
+}
+
+create_user_and_group_cmd = [
+  'groupadd -g 1000 go',
+  'useradd -u 1000 -g go go'
+]
+
 [
   {
     distro: 'debian',
     version: '7',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       "echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main' > /etc/apt/sources.list.d/webupd8team-java.list",
       'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886',
@@ -61,6 +73,8 @@ end
   {
     distro: 'debian',
     version: '8',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       "echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list",
       'apt-get update',
@@ -75,6 +89,8 @@ end
   {
     distro: 'ubuntu',
     version: '12.04',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu precise main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
@@ -88,6 +104,8 @@ end
   {
     distro: 'ubuntu',
     version: '14.04',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
@@ -101,6 +119,8 @@ end
   {
     distro: 'ubuntu',
     version: '16.04',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/openjdk-ppa.list",
       'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
@@ -112,6 +132,8 @@ end
   {
     distro: 'centos',
     version: '6',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       'yum update -y',
       'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip',
@@ -121,6 +143,8 @@ end
   {
     distro: 'centos',
     version: '7',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
     before_install: [
       'yum update -y',
       'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip',
@@ -131,6 +155,8 @@ end
   distro = image[:distro]
   version = image[:version]
   before_install = image[:before_install]
+  add_files = image[:add_files] || {}
+  create_user_and_group = image[:create_user_and_group] || []
 
   image_name = "gocd-agent-#{distro}-#{version}"
   repo_name = "docker-#{image_name}"
