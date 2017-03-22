@@ -23,6 +23,10 @@ MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 ARG GOCD_VERSION="<%= gocd_version %>"
 ARG DOWNLOAD_URL="<%= download_url %>"
 
+LABEL gocd.version=${GOCD_VERSION} \
+  description="GoCD agent based on <%= distro %> version <%= version %>" \
+  maintainer="GoCD <go-cd-dev@googlegroups.com>"
+
 ADD ${DOWNLOAD_URL} /tmp/go-agent.zip
 <% add_files.each do |file, meta| -%>
 ADD <%= meta[:url] %> <%= file %>
