@@ -49,23 +49,3 @@ RUN chmod 755 /usr/local/sbin/tini /usr/local/sbin/gosu && \
 ADD docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-#
-# # Exposing volumes in a simple manner, and setup links behind-the-scenes
-# # to match GoCD's directory structure
-#   mkdir -p ${GO_WORKING_DIR} && \
-# <% %w(pipelines config).each do |dir| -%>
-#   mkdir -p ${VOLUME_DIR}/<%= dir %> && \
-#   ln -sf ${VOLUME_DIR}/<%= dir %> ${GO_WORKING_DIR}/<%= dir %> && \
-# <% end -%>
-#   useradd -m go && \
-#   chown -R go:go ${VOLUME_DIR} ${GO_WORKING_DIR}
-#
-# ADD start-agent.sh /go-agent/start-agent.sh
-#
-#
-# USER go
-# ENTRYPOINT ["/usr/local/sbin/tini", "--"]
-# WORKDIR ${GO_WORKING_DIR}
-# ENV AGENT_WORK_DIR=${GO_WORKING_DIR}
-# CMD ["/go-agent/start-agent.sh"]
