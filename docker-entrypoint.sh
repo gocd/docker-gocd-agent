@@ -18,25 +18,36 @@ yell() { echo "$0: $*" >&2; }
 die() { yell "$*"; exit 111; }
 try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
-setup_autoregister_properties_file() {
-  if [ -n "$AGENT_AUTO_REGISTER_KEY" ]; then
-    echo "agent.auto.register.key=$AGENT_AUTO_REGISTER_KEY" >> $1
-  fi
+setup_autoregister_properties_file_for_elastic_agent() {
+  echo "agent.auto.register.key=${GO_EA_AUTO_REGISTER_KEY}" >> $1
+  echo "agent.auto.register.environments=${GO_EA_AUTO_REGISTER_ENVIRONMENT}" >> $1
+  echo "agent.auto.register.elasticAgent.agentId=${GO_EA_AUTO_REGISTER_ELASTIC_AGENT_ID}" >> $1
+  echo "agent.auto.register.elasticAgent.pluginId=${GO_EA_AUTO_REGISTER_ELASTIC_PLUGIN_ID}" >> $1
+  echo "agent.auto.register.hostname=${AGENT_AUTO_REGISTER_HOSTNAME}" >> $1
 
-  if [ -n "$AGENT_AUTO_REGISTER_RESOURCES" ]; then
-    echo "agent.auto.register.resources=$AGENT_AUTO_REGISTER_RESOURCES" >> $1
-  fi
+  export GO_SERVER_URL="${GO_EA_SERVER_URL}"
+  # unset variables, so we don't pollute and leak sensitive stuff to the agent process...
+  unset GO_EA_AUTO_REGISTER_KEY GO_EA_AUTO_REGISTER_ENVIRONMENT GO_EA_AUTO_REGISTER_ELASTIC_AGENT_ID GO_EA_AUTO_REGISTER_ELASTIC_PLUGIN_ID GO_EA_SERVER_URL AGENT_AUTO_REGISTER_HOSTNAME
+}
 
-  if [ -n "$AGENT_AUTO_REGISTER_ENVIRONMENTS" ]; then
-    echo "agent.auto.register.environments=$AGENT_AUTO_REGISTER_ENVIRONMENTS" >> $1
-  fi
-
-  if [ -n "$AGENT_AUTO_REGISTER_HOSTNAME" ]; then
-    echo "agent.auto.register.hostname=$AGENT_AUTO_REGISTER_HOSTNAME" >> $1
-  fi
+setup_autoregister_properties_file_for_normal_agent() {
+  echo "agent.auto.register.key=${AGENT_AUTO_REGISTER_KEY}" >> $1
+  echo "agent.auto.register.resources=${AGENT_AUTO_REGISTER_RESOURCES}" >> $1
+  echo "agent.auto.register.environments=${AGENT_AUTO_REGISTER_ENVIRONMENTS}" >> $1
+  echo "agent.auto.register.hostname=${AGENT_AUTO_REGISTER_HOSTNAME}" >> $1
 
   # unset variables, so we don't pollute and leak sensitive stuff to the agent process...
   unset AGENT_AUTO_REGISTER_KEY AGENT_AUTO_REGISTER_RESOURCES AGENT_AUTO_REGISTER_ENVIRONMENTS AGENT_AUTO_REGISTER_HOSTNAME
+}
+
+setup_autoregister_properties_file() {
+  if [ -n "$GO_EA_SERVER_URL" ]; then
+    setup_autoregister_properties_file_for_elastic_agent "$1"
+    try chown go:go $1
+  else
+    setup_autoregister_properties_file_for_normal_agent "$1"
+    try chown go:go $1
+  fi
 }
 
 VOLUME_DIR="/godata"
@@ -84,6 +95,8 @@ if [ "$1" = '/go-agent/agent.sh' ]; then
     done
 
     setup_autoregister_properties_file "${AGENT_WORK_DIR}/config/autoregister.properties"
+    touch "${STDOUT_LOG_FILE}"
+    chown go:go "${STDOUT_LOG_FILE}"
 	  try exec /usr/local/sbin/tini -- /usr/local/sbin/gosu go "$0" "$@" >> ${STDOUT_LOG_FILE} 2>&1
   fi
 fi
