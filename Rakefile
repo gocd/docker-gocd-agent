@@ -167,6 +167,7 @@ create_user_and_group_cmd = [
 ].each do |image|
   distro = image[:distro]
   version = image[:version]
+  image_tag = "v#{gocd_version}"
   before_install = image[:before_install]
   add_files = image[:add_files] || {}
   create_user_and_group = image[:create_user_and_group] || []
@@ -218,7 +219,7 @@ create_user_and_group_cmd = [
 
     task :create_tag do
       cd dir_name do
-        sh("git tag 'v#{gocd_version}'")
+        sh("git tag '#{image_tag}'")
       end
     end
 
