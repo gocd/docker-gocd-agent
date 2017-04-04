@@ -49,11 +49,13 @@ This image will work well with the [docker elastic agent plugin](https://github.
 
 ## Mounting volumes
 
-The GoCD agent will store all configuration, logs and perform builds in `/godata`. If you'd like to provide secure credentials like SSH private keys among other things, you can mount `/home/go`
+The GoCD agent will store all configuration, logs and perform builds in `/godata`. If you'd like to provide secure credentials like SSH private keys among other things, you can mount `/home/go`.
 
 ```
 docker run -v /path/to/godata:/godata -v /path/to/home-dir:/home/go gocd/<%= image_name %>:<%= image_tag %>
 ```
+
+> **Note:** Ensure that `/path/to/home-dir` and `/path/to/godata` is accessible by the `go` user in container (`go` user - uid 1000).
 
 ## Tweaking JVM options (memory, heap etc)
 
