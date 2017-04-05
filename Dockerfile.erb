@@ -32,7 +32,7 @@ ADD ${DOWNLOAD_URL} /tmp/go-agent.zip
 ADD <%= meta[:url] %> <%= file %>
 <% end %>
 # allow mounting ssh keys, dotfiles, and the go server config and data
-VOLUME /home/go /godata
+VOLUME /godata
 
 # force encoding
 ENV LANG=en_US.utf8
