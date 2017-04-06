@@ -206,7 +206,7 @@ create_user_and_group_cmd = [
 
     task :build_docker_image do
       cd dir_name do
-        sh("docker build . -t #{repo_name}")
+        sh("docker build . -t #{repo_name}:#{ENV['TAG'] || image_tag}")
       end
     end
 
