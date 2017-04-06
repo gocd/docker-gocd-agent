@@ -8,7 +8,7 @@ Please make sure to log them at https://github.com/gocd/docker-gocd-agent.
 
 # Changelog
 
-Please checkout the changes made every release to the agent images at https://https://github.com/gocd/docker-gocd-agent/blob/master/CHANGELOG.md
+Please checkout the changes made every release to the agent images at https://github.com/gocd/docker-gocd-agent/blob/master/CHANGELOG.md
 
 # Usage
 
