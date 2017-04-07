@@ -52,7 +52,7 @@ tini_and_gosu_add_file_meta = {
 
 create_user_and_group_cmd = [
   'groupadd -g 1000 go',
-  'useradd -u 1000 -g go go'
+  'useradd -u 1000 -g go -d /home/go -m go'
 ]
 
 [
