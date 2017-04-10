@@ -230,6 +230,10 @@ create_user_and_group_cmd = [
       end
     end
 
+    task :docker_push_image do
+      sh("docker push #{ENV['ORG']}/#{image_name}")
+    end
+
     desc "Publish #{image_name} to dockerhub"
     task publish: [:clean, :init, :create_dockerfile, :commit_dockerfile, :create_tag, :git_push]
 
@@ -242,4 +246,6 @@ create_user_and_group_cmd = [
 
   desc 'Build all images locally'
   task build_image: "#{image_name}:build_image"
+
+  task docker_push: "#{image_name}:docker_push_image"
 end
