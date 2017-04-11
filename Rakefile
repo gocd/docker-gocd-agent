@@ -26,6 +26,8 @@ end
 
 gocd_version = get_var('GOCD_VERSION')
 download_url = get_var('GOCD_AGENT_DOWNLOAD_URL')
+gocd_full_version = get_var('GOCD_FULL_VERSION')
+gocd_git_sha = get_var('GOCD_GIT_SHA')
 
 ROOT_DIR = Dir.pwd
 
@@ -206,7 +208,7 @@ create_user_and_group_cmd = [
 
     task :build_docker_image do
       cd dir_name do
-        sh("docker build . -t #{repo_name}:#{ENV['TAG'] || image_tag}")
+        sh("docker build . -t #{image_name}:#{ENV['TAG'] || image_tag}")
       end
     end
 
@@ -230,8 +232,19 @@ create_user_and_group_cmd = [
       end
     end
 
-    task :docker_push_image do
-      sh("docker push #{ENV['ORG']}/#{image_name}")
+    task :docker_push_image_experimental => :build_image do
+      org = ENV['EXP_ORG'] || 'gocdexperimental'
+      tag = "v#{gocd_full_version}"
+      sh("docker tag #{image_name}:#{image_tag} #{org}/#{image_name}:#{tag}")
+      sh("docker push #{org}/#{image_name}:#{tag}")
+    end
+
+    task :docker_push_image_stable do
+      org = ENV['ORG'] || 'gocd'
+      experimental_org = ENV['EXP_ORG'] || 'gocdexperimental'
+      sh("docker pull #{experimental_org}/#{image_name}:v#{gocd_full_version}")
+      sh("docker tag #{experimental_org}/#{image_name}:v#{gocd_full_version} #{org}/#{image_name}:#{image_tag}")
+      sh("docker push #{org}/#{image_name}:#{image_tag}")
     end
 
     desc "Publish #{image_name} to dockerhub"
@@ -247,5 +260,6 @@ create_user_and_group_cmd = [
   desc 'Build all images locally'
   task build_image: "#{image_name}:build_image"
 
-  task docker_push: "#{image_name}:docker_push_image"
+  task docker_push_experimental: "#{image_name}:docker_push_image_experimental"
+  task docker_push_stable: "#{image_name}:docker_push_image_stable"
 end

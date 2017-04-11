@@ -20,14 +20,13 @@
 FROM <%= distro %>:<%= version %>
 MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 
-ARG GOCD_VERSION="<%= gocd_version %>"
-ARG DOWNLOAD_URL="<%= download_url %>"
-
-LABEL gocd.version=${GOCD_VERSION} \
+LABEL gocd.version="<%= gocd_version %>" \
   description="GoCD agent based on <%= distro %> version <%= version %>" \
-  maintainer="GoCD <go-cd-dev@googlegroups.com>"
+  maintainer="GoCD <go-cd-dev@googlegroups.com>" \
+  gocd.full.version="<%= gocd_full_version %>" \
+  gocd.git.sha="<%= gocd_git_sha %>"
 
-ADD ${DOWNLOAD_URL} /tmp/go-agent.zip
+ADD "<%= download_url %>" /tmp/go-agent.zip
 <% add_files.each do |file, meta| -%>
 ADD <%= meta[:url] %> <%= file %>
 <% end %>
@@ -48,7 +47,7 @@ RUN \
   <%= before_install.join(" && \\ \n  ") -%> && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
-  mv go-agent-${GOCD_VERSION} /go-agent && \
+  mv go-agent-<%= gocd_version %> /go-agent && \
   rm /tmp/go-agent.zip
 
 ADD docker-entrypoint.sh /
