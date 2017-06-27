@@ -29,7 +29,14 @@ This will start the GoCD agent and connect it the GoCD server specified by `GO_S
 If you have a [gocd-server container](https://hub.docker.com/r/gocd/gocd-server/) running and it's named `angry_feynman`, you can connect a gocd-agent container to it by doing:
 
 ```
-docker run -itd -e GO_SERVER_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' angry_feynman):$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8154/tcp") 0).HostPort}}' angry_feynman)/go gocd/<%= image_name %>:<%= image_tag %>
+docker run -itd -e GO_SERVER_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' angry_feynman):8154/go gocd/<%= image_name %>:<%= image_tag %>
+```
+OR
+
+If the docker container running the gocd server has ports mapped to the host,
+
+```
+docker run -itd -e GO_SERVER_URL=https://<ip_of_host_machine>:$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8154/tcp") 0).HostPort}}' angry_feynman)/go gocd/<%= image_name %>:<%= image_tag %>
 ```
 
 # Available configuration options
