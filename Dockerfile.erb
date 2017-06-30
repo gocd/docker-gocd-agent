@@ -26,7 +26,6 @@ LABEL gocd.version="<%= gocd_version %>" \
   gocd.full.version="<%= gocd_full_version %>" \
   gocd.git.sha="<%= gocd_git_sha %>"
 
-ADD "<%= download_url %>" /tmp/go-agent.zip
 <% add_files.each do |file, meta| -%>
 ADD <%= meta[:url] %> <%= file %>
 <% end %>
@@ -44,7 +43,9 @@ RUN \
 # add our user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
   <%= create_user_and_group.join(" && \\ \n  ") -%> && \
-  <%= before_install.join(" && \\ \n  ") -%> && \
+  <%= before_install.join(" && \\\n  ") -%> && \
+# download the zip file
+  curl --fail --location --silent --show-error "<%= download_url %>" > /tmp/go-agent.zip && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
   mv go-agent-<%= gocd_version %> /go-agent && \
