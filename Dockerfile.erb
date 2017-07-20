@@ -49,7 +49,19 @@ RUN \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
   mv go-agent-<%= gocd_version %> /go-agent && \
-  rm /tmp/go-agent.zip
+  rm /tmp/go-agent.zip && \
+  # ensure that logs are printed to console output
+<% %w(agent-bootstrapper-log4j.properties agent-launcher-log4j.properties agent-log4j.properties).each do |log_properties_file| -%>
+  sed -i -e 's/\(log4j.rootLogger.*\)/\1, stdout/g' /go-agent/config/<%= log_properties_file %> && \
+  sed -i -e 's/\(log4j.rootCategory.*\)/\1, stdout/g' /go-agent/config/<%= log_properties_file %> && \
+  echo "" >> /go-agent/config/<%= log_properties_file %> && \
+  echo "" >> /go-agent/config/<%= log_properties_file %> && \
+  echo "# Log to stdout" >> /go-agent/config/<%= log_properties_file %> && \
+  echo "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" >> /go-agent/config/<%= log_properties_file %> && \
+  echo "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" >> /go-agent/config/<%= log_properties_file %> && \
+  echo "log4j.appender.stdout.layout.conversionPattern=%d{ISO8601} %5p [%t] %c{1}:%L - %m%n" >> /go-agent/config/<%= log_properties_file %> && \
+<% end -%>
+  true
 
 ADD docker-entrypoint.sh /
 
