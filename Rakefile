@@ -72,6 +72,19 @@ create_user_and_group_cmd = [
     ]
   },
   {
+      distro: 'alpine',
+      version: '3.6',
+      add_files: tini_and_gosu_add_file_meta,
+      create_user_and_group: [
+          'addgroup -g 1000 go',
+          'adduser -D -u 1000 -G go go'
+      ],
+      before_install: [
+          'apk --no-cache upgrade',
+          'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+      ]
+  },
+  {
     distro: 'debian',
     version: '7',
     add_files: tini_and_gosu_add_file_meta,
@@ -260,6 +273,9 @@ create_user_and_group_cmd = [
   desc 'Build all images locally'
   task build_image: "#{image_name}:build_image"
 
+  desc "Push all images to experimental"
   task docker_push_experimental: "#{image_name}:docker_push_image_experimental"
+
+  desc "Push all images to stable"
   task docker_push_stable: "#{image_name}:docker_push_image_stable"
 end
