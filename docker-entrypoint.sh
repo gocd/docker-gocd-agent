@@ -52,14 +52,12 @@ setup_autoregister_properties_file() {
 
 VOLUME_DIR="/godata"
 
-# these 3 vars are used by `/go-agent/agent.sh`, so we export
-export AGENT_WORK_DIR="/go"
-export STDOUT_LOG_FILE="/go/go-agent-bootstrapper.out.log"
+AGENT_WORK_DIR="/go"
 
 # no arguments are passed so assume user wants to run the gocd server
 # we prepend "/go-agent/agent.sh" to the argument list
 if [[ $# -eq 0 ]] ; then
-	set -- /go-agent/agent.sh "$@"
+  set -- /go-agent/agent.sh "$@"
 fi
 
 # if running go server as root, then initialize directory structure and call ourselves as `go` user
@@ -94,11 +92,29 @@ if [ "$1" = '/go-agent/agent.sh' ]; then
       fi
     done
 
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-bootstrapper-log4j.properties" ]; then
+      try cp -rfv "/go-agent/config/agent-bootstrapper-log4j.properties" "${AGENT_WORK_DIR}/config/agent-bootstrapper-log4j.properties"
+      try chown go:go "${VOLUME_DIR}/config/agent-bootstrapper-log4j.properties"
+    fi
+
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-launcher-log4j.properties" ]; then
+      try cp -rfv "/go-agent/config/agent-launcher-log4j.properties" "${AGENT_WORK_DIR}/config/agent-launcher-log4j.properties"
+      try chown go:go "${VOLUME_DIR}/config/agent-launcher-log4j.properties"
+    fi
+
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-log4j.properties" ]; then
+      try cp -rfv "/go-agent/config/agent-log4j.properties" "${AGENT_WORK_DIR}/config/agent-log4j.properties"
+      try chown go:go "${VOLUME_DIR}/config/agent-log4j.properties"
+    fi
+
     setup_autoregister_properties_file "${AGENT_WORK_DIR}/config/autoregister.properties"
-    touch "${STDOUT_LOG_FILE}"
-    chown go:go "${STDOUT_LOG_FILE}"
-    try exec /usr/local/sbin/tini -- /usr/local/sbin/gosu go "$0" "$@" >> ${STDOUT_LOG_FILE} 2>&1
+    try exec /usr/local/sbin/tini -- /usr/local/sbin/gosu go "$0" "$@"
   fi
 fi
+
+# these 3 vars are used by `/go-agent/agent.sh`, so we export
+export AGENT_WORK_DIR
+export GO_AGENT_SYSTEM_PROPERTIES="${GO_AGENT_SYSTEM_PROPERTIES}${GO_AGENT_SYSTEM_PROPERTIES:+ }-Dgo.console.stdout=true"
+export AGENT_BOOTSTRAPPER_JVM_ARGS="${AGENT_BOOTSTRAPPER_JVM_ARGS}${AGENT_BOOTSTRAPPER_JVM_ARGS:+ }-Dgo.console.stdout=true"
 
 try exec "$@"
