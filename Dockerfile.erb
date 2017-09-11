@@ -33,6 +33,9 @@ ADD <%= meta[:url] %> <%= file %>
 # force encoding
 ENV LANG=en_US.utf8
 
+ARG UID=1000
+ARG GID=1000
+
 RUN \
 <% unless add_files.empty? -%>
 # add mode and permissions for files we added above
