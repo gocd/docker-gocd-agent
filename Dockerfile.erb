@@ -29,8 +29,6 @@ LABEL gocd.version="<%= gocd_version %>" \
 <% add_files.each do |file, meta| -%>
 ADD <%= meta[:url] %> <%= file %>
 <% end %>
-# allow mounting ssh keys, dotfiles, and the go server config and data
-VOLUME /godata
 
 # force encoding
 ENV LANG=en_US.utf8
