@@ -53,8 +53,8 @@ tini_and_gosu_add_file_meta = {
 }
 
 create_user_and_group_cmd = [
-  'groupadd -g 1000 go',
-  'useradd -u 1000 -g go -d /home/go -m go'
+  'groupadd -g ${GID} go',
+  'useradd -u ${UID} -g go -d /home/go -m go'
 ]
 
 [
@@ -63,8 +63,8 @@ create_user_and_group_cmd = [
     version: '3.5',
     add_files: tini_and_gosu_add_file_meta,
     create_user_and_group: [
-      'addgroup -g 1000 go',
-      'adduser -D -u 1000 -G go go'
+      'addgroup -g ${GID} go',
+      'adduser -D -u ${UID} -G go go'
     ],
     before_install: [
       'apk --no-cache upgrade',
@@ -76,8 +76,8 @@ create_user_and_group_cmd = [
       version: '3.6',
       add_files: tini_and_gosu_add_file_meta,
       create_user_and_group: [
-          'addgroup -g 1000 go',
-          'adduser -D -u 1000 -G go go'
+          'addgroup -g ${GID} go',
+          'adduser -D -u ${UID} -G go go'
       ],
       before_install: [
           'apk --no-cache upgrade',
