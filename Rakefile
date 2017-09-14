@@ -77,7 +77,7 @@ create_user_and_group_cmd = [
       add_files: tini_and_gosu_add_file_meta,
       create_user_and_group: [
           'addgroup -g ${GID} go',
-          'adduser -D -u ${UID} -G go go'
+          'adduser -D -u ${UID} -s /bin/bash -G go go'
       ],
       before_install: [
           'apk --no-cache upgrade',
