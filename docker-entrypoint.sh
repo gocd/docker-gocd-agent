@@ -92,19 +92,19 @@ if [ "$1" = '/go-agent/agent.sh' ]; then
       fi
     done
 
-    if [ ! -e "${AGENT_WORK_DIR}/config/agent-bootstrapper-log4j.properties" ]; then
-      try cp -rfv "/go-agent/config/agent-bootstrapper-log4j.properties" "${AGENT_WORK_DIR}/config/agent-bootstrapper-log4j.properties"
-      try chown go:go "${VOLUME_DIR}/config/agent-bootstrapper-log4j.properties"
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-bootstrapper-logback-include.xml" ]; then
+      try cp -rfv "/go-agent/config/agent-bootstrapper-logback-include.xml" "${AGENT_WORK_DIR}/config/agent-bootstrapper-logback-include.xml"
+      try chown go:go "${VOLUME_DIR}/config/agent-bootstrapper-logback-include.xml"
     fi
 
-    if [ ! -e "${AGENT_WORK_DIR}/config/agent-launcher-log4j.properties" ]; then
-      try cp -rfv "/go-agent/config/agent-launcher-log4j.properties" "${AGENT_WORK_DIR}/config/agent-launcher-log4j.properties"
-      try chown go:go "${VOLUME_DIR}/config/agent-launcher-log4j.properties"
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-launcher-logback-include.xml" ]; then
+      try cp -rfv "/go-agent/config/agent-launcher-logback-include.xml" "${AGENT_WORK_DIR}/config/agent-launcher-logback-include.xml"
+      try chown go:go "${VOLUME_DIR}/config/agent-launcher-logback-include.xml"
     fi
 
-    if [ ! -e "${AGENT_WORK_DIR}/config/agent-log4j.properties" ]; then
-      try cp -rfv "/go-agent/config/agent-log4j.properties" "${AGENT_WORK_DIR}/config/agent-log4j.properties"
-      try chown go:go "${VOLUME_DIR}/config/agent-log4j.properties"
+    if [ ! -e "${AGENT_WORK_DIR}/config/agent-logback-include.xml" ]; then
+      try cp -rfv "/go-agent/config/agent-logback-include.xml" "${AGENT_WORK_DIR}/config/agent-logback-include.xml"
+      try chown go:go "${VOLUME_DIR}/config/agent-logback-include.xml"
     fi
 
     setup_autoregister_properties_file "${AGENT_WORK_DIR}/config/autoregister.properties"
