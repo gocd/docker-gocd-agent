@@ -1,3 +1,7 @@
+# Docker GoCD agent 17.11.0
+
+* [63e0ee9](https://github.com/gocd/docker-gocd-agent/commit/63e0ee9e61d700bac614ea58340d3fa730f29a42) - Move to using logback for writing logs to `STDOUT`
+
 # Docker GoCD agent 17.10.0
 
 * [be41207](https://github.com/gocd/docker-gocd-agent/commit/be412073742ea08d14d3b655e0aad01e6ec6a8f2) Allow users to specify `uid` and `gid` as build args while building a docker image.
