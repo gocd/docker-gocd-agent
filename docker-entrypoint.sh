@@ -108,6 +108,20 @@ if [ "$1" = '/go-agent/agent.sh' ]; then
     fi
 
     setup_autoregister_properties_file "${AGENT_WORK_DIR}/config/autoregister.properties"
+
+    yell "Running custom scripts in /docker-entrypoint.d/ ..."
+
+    # to prevent expansion to literal string `/docker-entrypoint.d/*` when there is nothing matching the glob
+    shopt -s nullglob
+
+    for file in /docker-entrypoint.d/*; do
+      if [ -f "$file" ] && [ -x "$file" ]; then
+        try "$file"
+      else
+        yell "Ignoring $file, it is either not a file or is not executable"
+      fi
+    done
+
     try exec /usr/local/sbin/tini -- /usr/local/sbin/gosu go "$0" "$@"
   fi
 fi
