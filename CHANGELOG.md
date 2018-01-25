@@ -1,3 +1,7 @@
+# Docker GoCD agent 18.1.0
+
+* [802c7b0](https://github.com/gocd/docker-gocd-agent/commit/802c7b04db0d6badc7608a6e7136bd6c71aeb0d7) - Add docker gocd agent alpine 3.7.
+
 # Docker GoCD agent 17.12.0
 
 * [#46](https://github.com/gocd/docker-gocd-server/issues/46) - add support for custom entry-point scripts on startup. Any executables volume mounted in `/docker-entrypoint.d` will be executed before starting the GoCD server. This will allow users to perform initialization when running the container, or building images that derive from the official GoCD docker agent images.
