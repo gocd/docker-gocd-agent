@@ -57,6 +57,8 @@ create_user_and_group_cmd = [
   'useradd -u ${UID} -g go -d /home/go -m go'
 ]
 
+maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USER'] && ENV['GIT_PASSWORD']
+
 [
   {
     distro: 'alpine',
@@ -95,6 +97,24 @@ create_user_and_group_cmd = [
     before_install: [
       'apk --no-cache upgrade',
       'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+    ]
+  },
+  {
+    distro: 'docker',
+    version: 'dind',
+    add_files: tini_and_gosu_add_file_meta,
+    repo_url: "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/gocd-agent-docker-dind",
+    create_user_and_group: [
+      'addgroup -g ${GID} go',
+      'adduser -D -u ${UID} -s /bin/bash -G go go',
+      'addgroup go root'
+    ],
+    before_install: [
+      'apk --no-cache upgrade',
+      'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+    ],
+    setup_commands: [
+      'sh -c "$(which dind) dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=vfs" > /usr/local/bin/nohup.out 2>&1 &'
     ]
   },
   {
@@ -199,12 +219,12 @@ create_user_and_group_cmd = [
   before_install = image[:before_install]
   add_files = image[:add_files] || {}
   create_user_and_group = image[:create_user_and_group] || []
+  setup_commands = image[:setup_commands] || []
 
   image_name = "gocd-agent-#{distro}-#{version}"
   repo_name = "docker-#{image_name}"
   dir_name = "build/#{repo_name}"
-  maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USER'] && ENV['GIT_PASSWORD']
-  repo_url = "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/#{repo_name}"
+  repo_url = image[:repo_url] || "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/#{repo_name}"
 
   namespace image_name do
     task :clean do
@@ -235,13 +255,22 @@ create_user_and_group_cmd = [
       end
     end
 
+    task :create_entrypoint_script do
+      docker_template = File.read('docker-entrypoint.sh.erb')
+      docker_renderer = ERB.new(docker_template, nil, '-')
+      File.open("#{dir_name}/docker-entrypoint.sh", 'w') do |f|
+        f.puts(docker_renderer.result(binding))
+      end
+      sh("chmod +x docker-entrypoint.sh")
+    end
+
     task :build_docker_image do
       cd dir_name do
         sh("docker build . -t #{image_name}:#{ENV['TAG'] || image_tag}")
       end
     end
 
-    task :commit_dockerfile do
+    task :commit_files do
       cd dir_name do
         sh('git add .')
         sh("git commit -m 'Update with GoCD Version #{gocd_version}' --author 'GoCD CI User <godev+gocd-ci-user@thoughtworks.com>'")
@@ -277,10 +306,10 @@ create_user_and_group_cmd = [
     end
 
     desc "Publish #{image_name} to dockerhub"
-    task publish: [:clean, :init, :create_dockerfile, :commit_dockerfile, :create_tag, :git_push]
+    task publish: [:clean, :init, :create_dockerfile, :create_entrypoint_script, :commit_files, :create_tag, :git_push]
 
     desc "Build #{image_name} image locally"
-    task build_image: [:clean, :init, :create_dockerfile, :build_docker_image]
+    task build_image: [:clean, :init, :create_dockerfile, :create_entrypoint_script, :build_docker_image]
   end
 
   desc 'Publish all images to dockerhub'
