@@ -54,6 +54,7 @@ VOLUME_DIR="/godata"
 
 AGENT_WORK_DIR="/go"
 
+<%= setup_commands.join(" \n ") -%>
 # no arguments are passed so assume user wants to run the gocd server
 # we prepend "/go-agent/agent.sh" to the argument list
 if [[ $# -eq 0 ]] ; then
