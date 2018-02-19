@@ -248,7 +248,6 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
         f.puts(readme_renderer.result(binding))
       end
 
-      cp("#{ROOT_DIR}/docker-entrypoint.sh", "#{dir_name}/docker-entrypoint.sh")
       cp "#{ROOT_DIR}/LICENSE-2.0.txt", "#{dir_name}/LICENSE-2.0.txt"
       Dir['*-logback-include.xml'].each do |f|
         cp f, "#{dir_name}"
@@ -261,7 +260,7 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
       File.open("#{dir_name}/docker-entrypoint.sh", 'w') do |f|
         f.puts(docker_renderer.result(binding))
       end
-      sh("chmod +x docker-entrypoint.sh")
+      sh("chmod +x #{dir_name}/docker-entrypoint.sh")
     end
 
     task :build_docker_image do
