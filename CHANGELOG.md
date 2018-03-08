@@ -1,3 +1,7 @@
+# Docker GoCD agent 18.2.0
+
+* [76b9abb](https://github.com/gocd/docker-gocd-agent/commit/76b9abb656be905be3837acf7890e8b891370476) - Add GoCD Docker In Docker Agent based on the official docker:dind image
+
 # Docker GoCD agent 18.1.0
 
 * [802c7b0](https://github.com/gocd/docker-gocd-agent/commit/802c7b04db0d6badc7608a6e7136bd6c71aeb0d7) - Add docker gocd agent alpine 3.7.
