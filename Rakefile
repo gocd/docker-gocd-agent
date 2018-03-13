@@ -148,6 +148,18 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
     ]
   },
   {
+    distro: 'debian',
+    version: '9',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: create_user_and_group_cmd,
+    before_install: [
+      'apt-get update',
+      'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
+      'apt-get autoclean',
+      '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
+    ]
+  },
+  {
     distro: 'ubuntu',
     version: '12.04',
     add_files: tini_and_gosu_add_file_meta,
