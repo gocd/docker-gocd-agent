@@ -1,3 +1,7 @@
+# Docker GoCD agent 18.3.0
+
+* [b8b8672](https://github.com/gocd/docker-gocd-agent/commit/b8b8672) - Add GoCD Debian 9 Agent image.
+
 # Docker GoCD agent 18.2.0
 
 * [76b9abb](https://github.com/gocd/docker-gocd-agent/commit/76b9abb656be905be3837acf7890e8b891370476) - Add GoCD Docker In Docker Agent based on the official docker:dind image
