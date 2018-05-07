@@ -119,21 +119,6 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
   },
   {
     distro: 'debian',
-    version: '7',
-    add_files: tini_and_gosu_add_file_meta,
-    create_user_and_group: create_user_and_group_cmd,
-    before_install: [
-      'apt-get update',
-      'apt-get install -y git subversion mercurial openssh-client bash unzip curl',
-      'mkdir jre',
-      'curl -L -v --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jre-8u171-linux-x64.tar.gz > jre-8u171-linux-x64.tar.gz && gunzip jre-8u171-linux-x64.tar.gz && tar xvf jre-8u171-linux-x64.tar -C /jre --strip-components=1',
-      'ln -s /jre/bin/java /usr/bin/java',
-      'rm jre-8u171-linux-x64.tar',
-      'apt-get autoclean'
-    ]
-  },
-  {
-    distro: 'debian',
     version: '8',
     add_files: tini_and_gosu_add_file_meta,
     create_user_and_group: create_user_and_group_cmd,
