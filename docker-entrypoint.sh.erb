@@ -50,7 +50,7 @@ setup_autoregister_properties_file() {
   fi
 }
 
-VOLUME_DIR="/godata"
+[ -z "${VOLUME_DIR}" ] && VOLUME_DIR="/godata"
 
 AGENT_WORK_DIR="/go"
 
