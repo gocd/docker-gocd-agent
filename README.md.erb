@@ -87,6 +87,14 @@ The GoCD server runs as the `go` user, the location of the various directories i
 | `/godata/logs`      | the directory where GoCD logs will be written out to                             |
 | `/home/go`          | the home directory for the GoCD server                                           |
 
+## Running docker and docker-compose in your jobs
+
+To be able to run the `docker` and `docker-compose` commands inside your jobs, you will need to share the docker socket as a volume from your host which is pretty classic.
+
+In this case, as the docker deamon will be the one mounting the volumes you define, the path to the files you will want to mount (basically inside `/godata/pipelines`) need to be the same so that the docker deamon (which is running on the host) can find the files.
+
+If you run several agents container, you will need to overwrite the `VOLUME_DIR` environment variable to have a different path for your `/godata` for each of your gocd agent containers (to avoid issues). For example, if the volume on your host for the first container is `/go-agent1/godata`, you will set the `VOLUME_DIR` environment data on your container to `/go-agent1/godata` and the `docker-entrypoint.sh` script will automatically manage it and make sure the agent stores its configuration, logs and pipelines there.
+
 # Troubleshooting
 
 ## The GoCD agent does not connect to the server
