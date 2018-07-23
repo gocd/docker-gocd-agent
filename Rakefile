@@ -62,6 +62,32 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
 [
   {
     distro: 'alpine',
+    version: '3.5',
+    add_files: tini_and_gosu_add_file_meta,
+    create_user_and_group: [
+      'addgroup -g ${GID} go',
+      'adduser -D -u ${UID} -s /bin/bash -G go go'
+    ],
+    before_install: [
+      'apk --no-cache upgrade',
+      'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+    ]
+  },
+  {
+      distro: 'alpine',
+      version: '3.6',
+      add_files: tini_and_gosu_add_file_meta,
+      create_user_and_group: [
+          'addgroup -g ${GID} go',
+          'adduser -D -u ${UID} -s /bin/bash -G go go'
+      ],
+      before_install: [
+          'apk --no-cache upgrade',
+          'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+      ]
+  },
+  {
+    distro: 'alpine',
     version: '3.7',
     add_files: tini_and_gosu_add_file_meta,
     create_user_and_group: [
