@@ -114,7 +114,7 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
       'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
     ],
     setup_commands: [
-      'sh -c "$(which dind) dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=vfs" > /usr/local/bin/nohup.out 2>&1 &'
+      'sh -c "$(which dind) dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375" > /usr/local/bin/nohup.out 2>&1 &'
     ]
   },
   {
