@@ -49,12 +49,13 @@ rake gocd-agent-ubuntu-16.04:build_image
 GOCD_VERSION=X.Y.Z GOCD_AGENT_DOWNLOAD_URL=https://download.gocd.io/binaries/X.Y.Z-PPPP/generic/go-agent-X.Y.Z-PPPP.zip
 rake publish [--trace]
 ```
+**_Note:_** *_Image will be removed from machine post push. To disable auto cleanup add env `CLEAN_IMAGES=false`_*
 
 
 # License
 
 ```plain
-Copyright 2017 ThoughtWorks, Inc.
+Copyright 2018 ThoughtWorks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
