@@ -293,7 +293,7 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
       tag = "v#{gocd_full_version}"
       sh("docker tag #{image_name}:#{image_tag} #{org}/#{image_name}:#{tag}")
       sh("docker push #{org}/#{image_name}:#{tag}")
-      sh("docker rmi -f #{org}/#{image_name}:#{tag} #{image_name}:#{image_tag}") if remove_image_post_push
+      sh("docker rmi -f #{org}/#{image_name}:#{tag} #{image_name}:#{image_tag} #{distro}:#{version}") if remove_image_post_push
     end
 
     task :docker_push_image_stable do
@@ -302,7 +302,7 @@ maybe_credentials = "#{ENV['GIT_USER']}:#{ENV['GIT_PASSWORD']}@" if ENV['GIT_USE
       sh("docker pull #{experimental_org}/#{image_name}:v#{gocd_full_version}")
       sh("docker tag #{experimental_org}/#{image_name}:v#{gocd_full_version} #{org}/#{image_name}:#{image_tag}")
       sh("docker push #{org}/#{image_name}:#{image_tag}")
-      sh("docker rmi -f #{org}/#{image_name}:#{tag} #{experimental_org}/#{image_name}:v#{gocd_full_version}") if remove_image_post_push
+      sh("docker rmi -f #{org}/#{image_name}:#{tag} #{experimental_org}/#{image_name}:v#{gocd_full_version} #{distro}:#{version}") if remove_image_post_push
     end
 
     desc "Publish #{image_name} to dockerhub"
