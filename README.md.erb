@@ -2,6 +2,12 @@
 
 [GoCD agent](https://www.gocd.io) docker image based on <%= distro %> <%= version %>.
 
+<%- if about_to_eol -%>
+# This image is deprecated
+
+> **Note**: This image is now deprecated and will be sunset on **<%= eol_date.strftime('%b %d, %Y') %>**.
+<%- end -%>
+
 # Issues, feedback?
 
 Please make sure to log them at https://github.com/gocd/docker-gocd-agent.

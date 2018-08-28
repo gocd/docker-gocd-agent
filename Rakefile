@@ -64,6 +64,8 @@ agents = [
     {
         distro: 'alpine',
         version: '3.5',
+        eol_date: '2018-11-01',
+        continue_to_build: true,
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
             'addgroup -g ${GID} go',
@@ -77,6 +79,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.6',
+        eol_date: '2019-05-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
             'addgroup -g ${GID} go',
@@ -90,6 +93,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.7',
+        eol_date: '2019-11-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
             'addgroup -g ${GID} go',
@@ -103,6 +107,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.8',
+        eol_date: '2020-05-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
             'addgroup -g ${GID} go',
@@ -116,6 +121,7 @@ agents = [
     {
         distro: 'docker',
         version: 'dind',
+        eol_date: '2099-01-01',
         add_files: tini_and_gosu_add_file_meta,
         repo_url: "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/gocd-agent-docker-dind",
         create_user_and_group: [
@@ -134,6 +140,7 @@ agents = [
     {
         distro: 'debian',
         version: '8',
+        eol_date: '2020-06-30',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -150,6 +157,7 @@ agents = [
     {
         distro: 'debian',
         version: '9',
+        eol_date: '2022-06-30',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -162,6 +170,8 @@ agents = [
     {
         distro: 'ubuntu',
         version: '12.04',
+        eol_date: '2018-09-05',
+        continue_to_build: true,
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -177,6 +187,7 @@ agents = [
     {
         distro: 'ubuntu',
         version: '14.04',
+        eol_date: '2019-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -192,6 +203,7 @@ agents = [
     {
         distro: 'ubuntu',
         version: '16.04',
+        eol_date: '2021-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -205,6 +217,7 @@ agents = [
     {
         distro: 'ubuntu',
         version: '18.04',
+        eol_date: '2023-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -216,6 +229,7 @@ agents = [
     {
         distro: 'centos',
         version: '6',
+        eol_date: '2020-11-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -227,6 +241,7 @@ agents = [
     {
         distro: 'centos',
         version: '7',
+        eol_date: '2024-06-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
@@ -250,6 +265,16 @@ agents_to_build.each do |image|
   add_files = image[:add_files] || {}
   create_user_and_group = image[:create_user_and_group] || []
   setup_commands = image[:setup_commands] || []
+  eol_date = Date.strptime(image[:eol_date], '%Y-%m-%d')
+  about_to_eol = (eol_date - Date.today) <= 95
+
+  if eol_date <= Date.today
+    raise "The image #{distro}:#{version} is unsupported EOL was #{eol_date}."
+  end
+
+  if about_to_eol && !image[:continue_to_build]
+    raise "The image #{distro}:#{version} is supposed to be EOL in #{(eol_date - Date.today).to_i} day(s), on #{eol_date}. Set :continue_to_build option to continue building."
+  end
 
   image_name = "gocd-agent-#{distro}-#{version}"
   repo_name = "docker-#{image_name}"
