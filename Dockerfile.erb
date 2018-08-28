@@ -54,9 +54,7 @@ RUN \
   mkdir -p /docker-entrypoint.d
 
 # ensure that logs are printed to console output
-<% %w(agent-bootstrapper-logback-include.xml agent-launcher-logback-include.xml agent-logback-include.xml).each do |log_config_file| -%>
-COPY <%= log_config_file %> /go-agent/config/<%= log_config_file %>
-<% end -%>
+COPY --chown agent-bootstrapper-logback-include.xml agent-launcher-logback-include.xml agent-logback-include.xml /go-agent/config/
 
 ADD docker-entrypoint.sh /
 
