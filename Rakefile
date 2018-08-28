@@ -101,6 +101,19 @@ agents = [
         ]
     },
     {
+        distro: 'alpine',
+        version: '3.8',
+        add_files: tini_and_gosu_add_file_meta,
+        create_user_and_group: [
+            'addgroup -g ${GID} go',
+            'adduser -D -u ${UID} -s /bin/bash -G go go'
+        ],
+        before_install: [
+            'apk --no-cache upgrade',
+            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+        ]
+    },
+    {
         distro: 'docker',
         version: 'dind',
         add_files: tini_and_gosu_add_file_meta,
@@ -234,11 +247,12 @@ agents_to_build.each do |image|
 
   namespace image_name do
     task :clean do
-      rm_rf dir_name
+      # rm_rf dir_name
     end
 
     task :init do
-      sh(%(git clone --quiet "#{repo_url}" #{dir_name}))
+      mkdir_p dir_name
+      # sh(%(git clone --quiet "#{repo_url}" #{dir_name}))
     end
 
     task :create_dockerfile do
