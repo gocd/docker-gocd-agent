@@ -1,3 +1,24 @@
+# Docker GoCD agent 18.8.0
+
+* Updated to use GoCD version 18.8.0
+* Introduced an alpine 3.8 based image
+
+# Docker GoCD agent 18.7.0
+
+* Updated to use GoCD version 18.7.0
+
+# Docker GoCD agent 18.6.0
+
+* Updated to use GoCD version 18.6.0
+
+# Docker GoCD agent 18.5.0
+
+* Updated to use GoCD version 18.5.0
+
+# Docker GoCD agent 18.4.0
+
+* Updated to use GoCD version 18.4.0
+
 # Docker GoCD agent 18.3.0
 
 * [b8b8672](https://github.com/gocd/docker-gocd-agent/commit/b8b8672) - Add GoCD Debian 9 Agent image.
