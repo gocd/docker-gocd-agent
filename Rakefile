@@ -203,6 +203,17 @@ agents = [
         ]
     },
     {
+        distro: 'ubuntu',
+        version: '18.04',
+        add_files: tini_and_gosu_add_file_meta,
+        create_user_and_group: create_user_and_group_cmd,
+        before_install: [
+            'apt-get update',
+            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get autoclean'
+        ]
+    },
+    {
         distro: 'centos',
         version: '6',
         add_files: tini_and_gosu_add_file_meta,
@@ -247,12 +258,11 @@ agents_to_build.each do |image|
 
   namespace image_name do
     task :clean do
-      # rm_rf dir_name
+      rm_rf dir_name
     end
 
     task :init do
-      mkdir_p dir_name
-      # sh(%(git clone --quiet "#{repo_url}" #{dir_name}))
+      sh(%(git clone --quiet "#{repo_url}" #{dir_name}))
     end
 
     task :create_dockerfile do

@@ -6,14 +6,15 @@ This repository is the parent repository for the following docker images
 * [gocd/gocd-agent-alpine-3.6](https://github.com/gocd/docker-gocd-agent-alpine-3.6)
 * [gocd/gocd-agent-alpine-3.7](https://github.com/gocd/docker-gocd-agent-alpine-3.7)
 * [gocd/gocd-agent-alpine-3.8](https://github.com/gocd/docker-gocd-agent-alpine-3.8)
-* [gocd/gocd-agent-docker-dind](https://github.com/gocd/gocd-agent-docker-dind)
-* [gocd/gocd-agent-centos-7](https://github.com/gocd/docker-gocd-agent-centos-7)
 * [gocd/gocd-agent-centos-6](https://github.com/gocd/docker-gocd-agent-centos-6)
-* [gocd/gocd-agent-ubuntu-16.04](https://github.com/gocd/docker-gocd-agent-ubuntu-16.04)
-* [gocd/gocd-agent-ubuntu-14.04](https://github.com/gocd/docker-gocd-agent-ubuntu-14.04)
-* [gocd/gocd-agent-ubuntu-12.04](https://github.com/gocd/docker-gocd-agent-ubuntu-12.04)
+* [gocd/gocd-agent-centos-7](https://github.com/gocd/docker-gocd-agent-centos-7)
 * [gocd/gocd-agent-debian-8](https://github.com/gocd/docker-gocd-agent-debian-8)
 * [gocd/gocd-agent-debian-9](https://github.com/gocd/docker-gocd-agent-debian-9)
+* [gocd/gocd-agent-docker-dind](https://github.com/gocd/gocd-agent-docker-dind)
+* [gocd/gocd-agent-ubuntu-12.04](https://github.com/gocd/docker-gocd-agent-ubuntu-12.04)
+* [gocd/gocd-agent-ubuntu-14.04](https://github.com/gocd/docker-gocd-agent-ubuntu-14.04)
+* [gocd/gocd-agent-ubuntu-16.04](https://github.com/gocd/docker-gocd-agent-ubuntu-16.04)
+* [gocd/gocd-agent-ubuntu-18.04](https://github.com/gocd/docker-gocd-agent-ubuntu-18.04)
 
 # Usage
 *The build process uses the `Rakefile` to build different tasks. There are three tasks that

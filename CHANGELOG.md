@@ -2,6 +2,7 @@
 
 * Updated to use GoCD version 18.8.0
 * Introduced an alpine 3.8 based image
+* Introduced an Ubuntu 18.04 based image
 
 # Docker GoCD agent 18.7.0
 
