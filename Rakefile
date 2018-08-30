@@ -23,8 +23,22 @@ end
 
 def get_var(name)
   value = ENV[name]
-  raise "Environment #{name} not specified!" if value.to_s.strip.empty?
+  raise "\e[1;31m[ERROR]\e[0m  Environment #{name} not specified!" if value.to_s.strip.empty?
   value
+end
+
+class Docker
+  def self.login
+    token = ENV["TOKEN"]
+    if token
+      FileUtils.mkdir_p "#{Dir.home}/.docker"
+      File.open("#{Dir.home}/.docker/config.json", "w") do |f|
+        f.write({:auths => {"https://index.docker.io/v1/" => {:auth => token}}}.to_json)
+      end
+    else
+      puts "\e[1;33m[WARN]\e[0m Skipping docker login as environment variable TOKEN is not specified."
+    end
+  end
 end
 
 gocd_full_version = versionFile('go_full_version') || get_var('GOCD_FULL_VERSION')
@@ -33,6 +47,9 @@ gocd_git_sha = versionFile('git_sha') || get_var('GOCD_GIT_SHA')
 remove_image_post_push = ENV['CLEAN_IMAGES'] || true
 
 download_url = ENV['GOCD_AGENT_DOWNLOAD_URL'] || "https://download.gocd.org/experimental/binaries/#{gocd_full_version}/generic/go-agent-#{gocd_full_version}.zip"
+
+# Perform docker login if token is specified
+Docker.login
 
 ROOT_DIR = Dir.pwd
 
