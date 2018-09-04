@@ -375,6 +375,7 @@ agents_to_build.each do |image|
 
     task :docker_push_image_stable do
       org = ENV['ORG'] || 'gocd'
+      tag = "v#{gocd_full_version}"
       experimental_org = ENV['EXP_ORG'] || 'gocdexperimental'
       sh("docker pull #{experimental_org}/#{image_name}:v#{gocd_full_version}")
       sh("docker tag #{experimental_org}/#{image_name}:v#{gocd_full_version} #{org}/#{image_name}:#{image_tag}")
