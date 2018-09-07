@@ -190,23 +190,6 @@ agents = [
     },
     {
         distro: 'ubuntu',
-        version: '12.04',
-        eol_date: '2018-09-05',
-        continue_to_build: true,
-        add_files: tini_and_gosu_add_file_meta,
-        create_user_and_group: create_user_and_group_cmd,
-        before_install: [
-            "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu precise main' > /etc/apt/sources.list.d/openjdk-ppa.list",
-            'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
-            'apt-get update',
-            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean',
-            # fix for https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
-            '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
-        ]
-    },
-    {
-        distro: 'ubuntu',
         version: '14.04',
         eol_date: '2019-04-01',
         add_files: tini_and_gosu_add_file_meta,
