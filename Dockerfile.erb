@@ -17,7 +17,7 @@
 # Please file any issues or PRs at https://github.com/gocd/docker-gocd-agent
 ###############################################################################################
 
-FROM <%= distro %>:<%= version %>
+FROM <%= distro %>:<%= release_name %>
 MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 
 LABEL gocd.version="<%= gocd_version %>" \
