@@ -85,6 +85,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.5',
+        release_name: '3.5',
         eol_date: '2018-11-01',
         continue_to_build: true,
         add_files: tini_and_gosu_add_file_meta,
@@ -100,6 +101,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.6',
+        release_name: '3.6',
         eol_date: '2019-05-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
@@ -114,6 +116,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.7',
+        release_name: '3.7',
         eol_date: '2019-11-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
@@ -128,6 +131,7 @@ agents = [
     {
         distro: 'alpine',
         version: '3.8',
+        release_name: '3.8',
         eol_date: '2020-05-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: [
@@ -142,6 +146,7 @@ agents = [
     {
         distro: 'docker',
         version: 'dind',
+        release_name: 'dind',
         eol_date: '2099-01-01',
         add_files: tini_and_gosu_add_file_meta,
         repo_url: "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/gocd-agent-docker-dind",
@@ -161,6 +166,7 @@ agents = [
     {
         distro: 'debian',
         version: '8',
+        release_name: 'jessie',
         eol_date: '2020-06-30',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -178,6 +184,7 @@ agents = [
     {
         distro: 'debian',
         version: '9',
+        release_name: 'stretch',
         eol_date: '2022-06-30',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -191,6 +198,7 @@ agents = [
     {
         distro: 'ubuntu',
         version: '14.04',
+        release_name: 'trusty',
         eol_date: '2019-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -198,7 +206,7 @@ agents = [
             "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main' > /etc/apt/sources.list.d/openjdk-ppa.list",
             'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
             'apt-get update',
-            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y openjdk-10-jre-headless git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean',
             # fix for https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
             '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
@@ -207,6 +215,7 @@ agents = [
     {
         distro: 'ubuntu',
         version: '16.04',
+        release_name:'xenial',
         eol_date: '2021-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -214,25 +223,27 @@ agents = [
             "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/openjdk-ppa.list",
             'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
             'apt-get update',
-            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y openjdk-10-jre-headless git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean'
         ]
     },
     {
         distro: 'ubuntu',
         version: '18.04',
+        release_name:'bionic',
         eol_date: '2023-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y default-jre-headless git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean'
         ]
     },
     {
         distro: 'centos',
         version: '6',
+        release_name:'6',
         eol_date: '2020-11-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -245,6 +256,7 @@ agents = [
     {
         distro: 'centos',
         version: '7',
+        release_name:'7',
         eol_date: '2024-06-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
@@ -264,6 +276,7 @@ agents_to_build = agents.each_slice(agents_per_worker).to_a[current_worker_index
 agents_to_build.each do |image|
   distro = image[:distro]
   version = image[:version]
+  release_name = image[:release_name]
   image_tag = "v#{gocd_version}"
   before_install = image[:before_install]
   add_files = image[:add_files] || {}
