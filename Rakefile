@@ -45,8 +45,8 @@ gocd_full_version = versionFile('go_full_version') || get_var('GOCD_FULL_VERSION
 gocd_version = versionFile('go_version') || get_var('GOCD_VERSION')
 gocd_git_sha = versionFile('git_sha') || get_var('GOCD_GIT_SHA')
 remove_image_post_push = ENV['CLEAN_IMAGES'] || true
-
-download_url = ENV['GOCD_AGENT_DOWNLOAD_URL'] || "https://download.gocd.org/experimental/binaries/#{gocd_full_version}/generic/go-agent-#{gocd_full_version}.zip"
+is_stable_release = ENV['GOCD_STABLE_RELEASE'] == "true" || false
+download_url = ENV['GOCD_AGENT_DOWNLOAD_URL'] || "https://download.gocd.org#{is_stable_release ? "/" : "/experimental/" }binaries/#{gocd_full_version}/generic/go-agent-#{gocd_full_version}.zip"
 
 # Perform docker login if token is specified
 Docker.login
