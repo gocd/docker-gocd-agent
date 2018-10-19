@@ -149,6 +149,7 @@ agents = [
         release_name: 'dind',
         eol_date: '2099-01-01',
         add_files: tini_and_gosu_add_file_meta,
+        needs_privileged_mode: true,
         repo_url: "https://#{maybe_credentials}github.com/#{ENV['REPO_OWNER'] || 'gocd'}/gocd-agent-docker-dind",
         create_user_and_group: [
             'addgroup -g ${GID} go',
@@ -284,6 +285,7 @@ agents_to_build.each do |image|
   setup_commands = image[:setup_commands] || []
   eol_date = Date.strptime(image[:eol_date], '%Y-%m-%d')
   about_to_eol = (eol_date - Date.today) <= 95
+  needs_privileged_mode = image[:needs_privileged_mode] || false
 
   if eol_date <= Date.today
     raise "The image #{distro}:#{version} is unsupported EOL was #{eol_date}."
