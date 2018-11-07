@@ -250,12 +250,25 @@ agents = [
             'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
         ]
-    },	
+    },
+    {
+      distro: 'fedora',
+      version: '28',
+      release_name:'28',
+      eol_date: '2019-05-01', # approximate date - 1 year from release date, check when the build fails
+      add_files: tini_and_gosu_add_file_meta,
+      create_user_and_group: create_user_and_group_cmd,
+      before_install: [
+          'yum update -y',
+          'yum install -y java-11-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
+          'yum clean all'
+      ]
+    },
     {
         distro: 'fedora',
         version: '29',
         release_name:'29',
-        eol_date: '2019-11-30',
+        eol_date: '2019-11-30', # approximate date - 1 year from release date, check when the build fails
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
