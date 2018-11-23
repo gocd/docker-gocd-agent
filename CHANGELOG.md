@@ -1,13 +1,21 @@
-# Docker GoCD agent 18.10.0
+# Docker GoCD agent 18.11.0
+
+* Updated to use GoCD version 18.10.0
+
+# Docker GoCD agent 18.11.0
 
 * Updated to use GoCD version 18.10.0
 * Removed alpine 3.5 agent image
-* Removed ubuntu 12.04 agent image
 * Introduced fedora 28 and 29 based docker agent images
+
+# Docker GoCD agent 18.10.0
+
+* Updated to use GoCD version 18.10.0
 
 # Docker GoCD agent 18.9.0
 
 * Updated to use GoCD version 18.9.0
+* Removed ubuntu 12.04 agent image
 
 # Docker GoCD agent 18.8.0
 
