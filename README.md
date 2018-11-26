@@ -14,6 +14,8 @@ This repository is the parent repository for the following docker images
 * [gocd/gocd-agent-ubuntu-14.04](https://github.com/gocd/docker-gocd-agent-ubuntu-14.04)
 * [gocd/gocd-agent-ubuntu-16.04](https://github.com/gocd/docker-gocd-agent-ubuntu-16.04)
 * [gocd/gocd-agent-ubuntu-18.04](https://github.com/gocd/docker-gocd-agent-ubuntu-18.04)
+* [gocd/docker-gocd-agent-fedora-28](https://github.com/gocd/docker-gocd-agent-fedora-28)
+* [gocd/docker-gocd-agent-fedora-29](https://github.com/gocd/docker-gocd-agent-fedora-29)
 
 # Usage
 *The build process uses the `Rakefile` to build different tasks. There are three tasks that
