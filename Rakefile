@@ -69,6 +69,16 @@ def gosu_url
   gosu_assets.find {|asset| asset['browser_download_url'] =~ /gosu-amd64$/}['browser_download_url']
 end
 
+def install_java
+  openjdk_download_url = ENV['OPENJDK_DOWNLOAD_URL'] || 'https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz'
+  [
+      "curl --fail --location --silent --show-error #{openjdk_download_url} > openjdk-bin.tar.gz",
+      'mkdir -p /go-agent/jre',
+      'tar -xf openjdk-bin.tar.gz -C /go-agent/jre --strip 1 --exclude "jdk*/lib/src.zip" --exclude "jdk*/include" --exclude "jdk*/jmods"',
+      'rm -rf openjdk-bin.*'
+  ]
+end
+
 tini_and_gosu_add_file_meta = {
     '/usr/local/sbin/tini' => {url: tini_url, mode: '0755', owner: 'root', group: 'root'},
     '/usr/local/sbin/gosu' => {url: gosu_url, mode: '0755', owner: 'root', group: 'root'}
@@ -160,11 +170,9 @@ agents = [
             'apt-get update',
             # see https://bugs.debian.org/775775
             # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
-            'apt-get install -y openjdk-8-jre-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean',
-            # see comment above
-            '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
-        ]
+            'apt-get install -y git subversion mercurial openssh-client bash unzip curl',
+            'apt-get autoclean'
+        ] + install_java
     },
     {
         distro: 'debian',
@@ -175,10 +183,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y openjdk-8-jre-headless git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean',
-            '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
-        ]
+            'apt-get install -y git subversion mercurial openssh-client bash unzip curl',
+            'apt-get autoclean'
+        ] + install_java
     },
     {
         distro: 'ubuntu',
@@ -188,94 +195,88 @@ agents = [
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
-            "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main' > /etc/apt/sources.list.d/openjdk-ppa.list",
-            'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
             'apt-get update',
-            'apt-get install -y openjdk-11-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean',
-            # fix for https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
-            '/var/lib/dpkg/info/ca-certificates-java.postinst configure'
-        ]
+        ] + install_java
     },
     {
         distro: 'ubuntu',
         version: '16.04',
-        release_name:'xenial',
+        release_name: 'xenial',
         eol_date: '2021-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
-            "echo deb 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu xenial main' > /etc/apt/sources.list.d/openjdk-ppa.list",
-            'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A',
             'apt-get update',
-            'apt-get install -y openjdk-11-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean'
-        ]
+        ] + install_java
     },
     {
         distro: 'ubuntu',
         version: '18.04',
-        release_name:'bionic',
+        release_name: 'bionic',
         eol_date: '2023-04-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y openjdk-11-jre-headless git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
             'apt-get autoclean'
-        ]
+        ] + install_java
     },
     {
         distro: 'centos',
         version: '6',
-        release_name:'6',
+        release_name: '6',
         eol_date: '2020-11-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'yum update -y',
-            'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
+            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
-        ]
+        ] + install_java
     },
     {
         distro: 'centos',
         version: '7',
-        release_name:'7',
+        release_name: '7',
         eol_date: '2024-06-01',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'yum update -y',
-            'yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
+            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
-        ]
+        ] + install_java
     },
     {
-      distro: 'fedora',
-      version: '28',
-      release_name:'28',
-      eol_date: '2019-05-01', # approximate date - 1 year from release date, check when the build fails
-      add_files: tini_and_gosu_add_file_meta,
-      create_user_and_group: create_user_and_group_cmd,
-      before_install: [
-          'yum update -y',
-          'yum install -y java-11-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
-          'yum clean all'
-      ]
+        distro: 'fedora',
+        version: '28',
+        release_name: '28',
+        eol_date: '2019-05-01', # approximate date - 1 year from release date, check when the build fails
+        add_files: tini_and_gosu_add_file_meta,
+        create_user_and_group: create_user_and_group_cmd,
+        before_install: [
+            'yum update -y',
+            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
+            'yum clean all'
+        ] + install_java
     },
     {
         distro: 'fedora',
         version: '29',
-        release_name:'29',
+        release_name: '29',
         eol_date: '2019-11-30', # approximate date - 1 year from release date, check when the build fails
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'yum update -y',
-            'yum install -y java-11-openjdk-headless git mercurial subversion openssh-clients bash unzip curl',
+            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
-        ]
+        ] + install_java
     }
 ]
 
