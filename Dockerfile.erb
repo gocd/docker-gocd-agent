@@ -32,6 +32,7 @@ ADD <%= meta[:url] %> <%= file %>
 
 # force encoding
 ENV LANG=en_US.utf8
+ENV GO_JAVA_HOME="/go-agent/jre"
 
 ARG UID=1000
 ARG GID=1000
@@ -49,7 +50,7 @@ RUN \
   curl --fail --location --silent --show-error "<%= download_url %>" > /tmp/go-agent.zip && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
-  mv go-agent-<%= gocd_version %> /go-agent && \
+  mv go-agent-<%= gocd_version %>/** /go-agent/ && \
   rm /tmp/go-agent.zip && \
   mkdir -p /docker-entrypoint.d
 
