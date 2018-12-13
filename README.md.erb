@@ -60,10 +60,11 @@ docker run <%= needs_privileged_mode ? "--privileged " : "" %>-d \
 
 If the `AGENT_AUTO_REGISTER_*` variables are provided (we recommend that you do), then the agent will be automatically approved by the server. See the [auto registration docs](https://docs.gocd.io/current/advanced_usage/agent_auto_register.html) on the GoCD website.
 
+<% unless needs_privileged_mode %>
 ## Usage with docker and swarm elastic agent plugins
 
 This image will work well with the [docker elastic agent plugin](https://github.com/gocd-contrib/docker-elastic-agents) and the [docker swarm elastic agent plugin](https://github.com/gocd-contrib/docker-swarm-elastic-agents). No special configuration would be needed.
-
+<% end %>
 ## Mounting volumes
 
 The GoCD agent will store all configuration, logs and perform builds in `/godata`. If you'd like to provide secure credentials like SSH private keys among other things, you can mount `/home/go`.
@@ -93,6 +94,7 @@ The GoCD server runs as the `go` user, the location of the various directories i
 | `/godata/logs`      | the directory where GoCD logs will be written out to                             |
 | `/home/go`          | the home directory for the GoCD server                                           |
 
+<% unless needs_privileged_mode %>
 ## Running docker and docker-compose in your jobs
 
 To be able to run the `docker` and `docker-compose` commands inside your jobs, you will need to share the docker socket as a volume from your host which is pretty classic.
@@ -100,6 +102,7 @@ To be able to run the `docker` and `docker-compose` commands inside your jobs, y
 In this case, as the docker deamon will be the one mounting the volumes you define, the path to the files you will want to mount (basically inside `/godata/pipelines`) need to be the same so that the docker deamon (which is running on the host) can find the files.
 
 If you run several agents container, you will need to overwrite the `VOLUME_DIR` environment variable to have a different path for your `/godata` for each of your gocd agent containers (to avoid issues). For example, if the volume on your host for the first container is `/go-agent1/godata`, you will set the `VOLUME_DIR` environment data on your container to `/go-agent1/godata` and the `docker-entrypoint.sh` script will automatically manage it and make sure the agent stores its configuration, logs and pipelines there.
+<% end %>
 
 # Troubleshooting
 
