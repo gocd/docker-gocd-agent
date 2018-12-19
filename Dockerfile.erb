@@ -50,7 +50,7 @@ RUN \
   curl --fail --location --silent --show-error "<%= download_url %>" > /tmp/go-agent.zip && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
-<% if distro == 'alpine' -%>
+<% if ['docker', 'alpine'].include?(distro) -%>
   mv go-agent-<%= gocd_version %> /go-agent/ && \
 <% else -%>
   mv go-agent-<%= gocd_version %>/** /go-agent/ && \
