@@ -50,7 +50,11 @@ RUN \
   curl --fail --location --silent --show-error "<%= download_url %>" > /tmp/go-agent.zip && \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
+<% if distro == 'alpine' -%>
+  mv go-agent-<%= gocd_version %> /go-agent/ && \
+<% else -%>
   mv go-agent-<%= gocd_version %>/** /go-agent/ && \
+<% end -%>
   rm /tmp/go-agent.zip && \
   mkdir -p /docker-entrypoint.d
 
