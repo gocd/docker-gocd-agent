@@ -31,7 +31,9 @@ ADD <%= meta[:url] %> <%= file %>
 <% end %>
 
 # force encoding
-ENV LANG=en_US.utf8
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
 <% unless ['docker', 'alpine'].include?(distro) -%>
 ENV GO_JAVA_HOME="/go-agent/jre"
 <% end-%>
