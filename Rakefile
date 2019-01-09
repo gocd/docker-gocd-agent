@@ -170,8 +170,9 @@ agents = [
             'apt-get update',
             # see https://bugs.debian.org/775775
             # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
-            'apt-get install -y git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean'
+            'apt-get install -y git subversion mercurial openssh-client bash unzip curl locales',
+            'apt-get autoclean',
+            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
         ] + install_java
     },
     {
@@ -183,8 +184,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean'
+            'apt-get install -y git subversion mercurial openssh-client bash unzip curl locales',
+            'apt-get autoclean',
+            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
         ] + install_java
     },
     {
@@ -196,8 +198,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl locales',
             'apt-get autoclean',
+            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
         ] + install_java
     },
     {
@@ -209,8 +212,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean'
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl locales',
+            'apt-get autoclean',
+            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
         ] + install_java
     },
     {
@@ -222,8 +226,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'apt-get update',
-            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl',
-            'apt-get autoclean'
+            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl locales',
+            'apt-get autoclean',
+            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
         ] + install_java
     },
     {
