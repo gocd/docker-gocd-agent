@@ -194,6 +194,7 @@ agents = [
         version: '14.04',
         release_name: 'trusty',
         eol_date: '2019-04-01',
+        continue_to_build: 'true',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
