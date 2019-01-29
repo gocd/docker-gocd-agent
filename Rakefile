@@ -264,6 +264,7 @@ agents = [
         version: '28',
         release_name: '28',
         eol_date: '2019-05-01', # approximate date - 1 year from release date, check when the build fails
+        continue_to_build: 'true',
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
