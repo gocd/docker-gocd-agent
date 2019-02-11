@@ -139,6 +139,21 @@ agents = [
         ]
     },
     {
+        distro: 'alpine',
+        version: '3.9',
+        release_name: '3.9',
+        eol_date: '2021-01-01',
+        add_files: tini_and_gosu_add_file_meta,
+        create_user_and_group: [
+            'addgroup -g ${GID} go',
+            'adduser -D -u ${UID} -s /bin/bash -G go go'
+        ],
+        before_install: [
+            'apk --no-cache upgrade',
+            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+        ]
+    },
+    {
         distro: 'docker',
         version: 'dind',
         release_name: 'dind',
