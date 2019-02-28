@@ -1,4 +1,4 @@
-# Copyright 2018 ThoughtWorks, Inc.
+# Copyright 2019 ThoughtWorks, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -278,6 +278,7 @@ agents = [
         distro: 'fedora',
         version: '28',
         release_name: '28',
+        continue_to_build: 'true',
         eol_date: '2019-06-01', # Fedora has 13 months for EOL
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
