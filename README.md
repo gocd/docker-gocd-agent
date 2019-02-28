@@ -5,6 +5,7 @@ This repository is the parent repository for the following docker images
 * [gocd/gocd-agent-alpine-3.6](https://github.com/gocd/docker-gocd-agent-alpine-3.6)
 * [gocd/gocd-agent-alpine-3.7](https://github.com/gocd/docker-gocd-agent-alpine-3.7)
 * [gocd/gocd-agent-alpine-3.8](https://github.com/gocd/docker-gocd-agent-alpine-3.8)
+* [gocd/gocd-agent-alpine-3.9](https://github.com/gocd/docker-gocd-agent-alpine-3.9)
 * [gocd/gocd-agent-centos-6](https://github.com/gocd/docker-gocd-agent-centos-6)
 * [gocd/gocd-agent-centos-7](https://github.com/gocd/docker-gocd-agent-centos-7)
 * [gocd/gocd-agent-debian-8](https://github.com/gocd/docker-gocd-agent-debian-8)
