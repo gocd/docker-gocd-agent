@@ -79,6 +79,14 @@ def install_java
   ]
 end
 
+def yum_install_git29
+  [
+      "yum install --assumeyes centos-release-scl",
+      "yum install --assumeyes rh-git29",
+      "cp /opt/rh/rh-git29/enable /etc/profile.d/rh-git29.sh"
+  ]
+end
+
 tini_and_gosu_add_file_meta = {
     '/usr/local/sbin/tini' => {url: tini_url, mode: '0755', owner: 'root', group: 'root'},
     '/usr/local/sbin/gosu' => {url: gosu_url, mode: '0755', owner: 'root', group: 'root'}
@@ -257,9 +265,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'yum update -y',
-            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
+            'yum install -y mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
-        ] + install_java
+        ] + yum_install_git29 + install_java
     },
     {
         distro: 'centos',
@@ -270,9 +278,9 @@ agents = [
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
             'yum update -y',
-            'yum install -y git mercurial subversion openssh-clients bash unzip curl',
+            'yum install -y mercurial subversion openssh-clients bash unzip curl',
             'yum clean all'
-        ] + install_java
+        ] + yum_install_git29 + install_java
     },
     {
         distro: 'fedora',
