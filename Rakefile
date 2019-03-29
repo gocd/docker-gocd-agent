@@ -190,10 +190,7 @@ agents = [
         add_files: tini_and_gosu_add_file_meta,
         create_user_and_group: create_user_and_group_cmd,
         before_install: [
-            "echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list",
             'apt-get update',
-            # see https://bugs.debian.org/775775
-            # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
             'apt-get install -y git subversion mercurial openssh-client bash unzip curl locales',
             'apt-get autoclean',
             'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
