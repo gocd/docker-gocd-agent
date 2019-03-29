@@ -113,7 +113,7 @@ agents = [
         ],
         before_install: [
             'apk --no-cache upgrade',
-            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+            'apk add --no-cache nss openjdk8-jre-base git mercurial subversion openssh-client bash curl'
         ]
     },
     {
@@ -128,7 +128,7 @@ agents = [
         ],
         before_install: [
             'apk --no-cache upgrade',
-            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+            'apk add --no-cache nss openjdk8-jre-base git mercurial subversion openssh-client bash curl'
         ]
     },
     {
@@ -143,7 +143,7 @@ agents = [
         ],
         before_install: [
             'apk --no-cache upgrade',
-            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+            'apk add --no-cache nss openjdk8-jre-base git mercurial subversion openssh-client bash curl'
         ]
     },
     {
@@ -158,7 +158,7 @@ agents = [
         ],
         before_install: [
             'apk --no-cache upgrade',
-            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+            'apk add --no-cache nss openjdk8-jre-base git mercurial subversion openssh-client bash curl'
         ]
     },
     {
@@ -176,7 +176,7 @@ agents = [
         ],
         before_install: [
             'apk --no-cache upgrade',
-            'apk add --no-cache openjdk8-jre-base git mercurial subversion openssh-client bash curl'
+            'apk add --no-cache nss openjdk8-jre-base git mercurial subversion openssh-client bash curl'
         ],
         setup_commands: [
             'sh -c "$(which dind) dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375" > /usr/local/bin/nohup.out 2>&1 &'
