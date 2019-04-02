@@ -212,21 +212,6 @@ agents = [
     },
     {
         distro: 'ubuntu',
-        version: '14.04',
-        release_name: 'trusty',
-        eol_date: '2019-04-01',
-        continue_to_build: 'true',
-        add_files: tini_and_gosu_add_file_meta,
-        create_user_and_group: create_user_and_group_cmd,
-        before_install: [
-            'apt-get update',
-            'apt-get install -y  git subversion mercurial openssh-client bash unzip curl locales',
-            'apt-get autoclean',
-            'echo \'en_US.UTF-8 UTF-8\' > /etc/locale.gen && /usr/sbin/locale-gen'
-        ] + install_java
-    },
-    {
-        distro: 'ubuntu',
         version: '16.04',
         release_name: 'xenial',
         eol_date: '2021-04-01',
