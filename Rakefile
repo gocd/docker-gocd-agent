@@ -69,13 +69,20 @@ def gosu_url
   gosu_assets.find {|asset| asset['browser_download_url'] =~ /gosu-amd64$/}['browser_download_url']
 end
 
+def adoptopenjdk_assets
+  @adoptopenjdk_assets ||= JSON.parse(open('https://api.github.com/repos/AdoptOpenJDK/openjdk12-binaries/releases/latest').read)['assets']
+end
+
+def adoptopenjre_url
+  adoptopenjdk_assets.find {|asset| asset['name'] =~ /jre_x64_linux_hotspot.*.tar.gz/ }['browser_download_url']
+end
+
 def install_java
-  openjdk_download_url = ENV['OPENJDK_DOWNLOAD_URL'] || 'https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz'
   [
-      "curl --fail --location --silent --show-error #{openjdk_download_url} > openjdk-bin.tar.gz",
+      "curl --fail --location --silent --show-error #{adoptopenjre_url} > adoptopenjre.tar.gz",
       'mkdir -p /go-agent/jre',
-      'tar -xf openjdk-bin.tar.gz -C /go-agent/jre --strip 1 --exclude "jdk*/lib/src.zip" --exclude "jdk*/include" --exclude "jdk*/jmods"',
-      'rm -rf openjdk-bin.*'
+      'tar -xf adoptopenjre.tar.gz -C /go-agent/jre --strip 1',
+      'rm -rf adoptopenjre.tar.gz'
   ]
 end
 
