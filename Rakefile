@@ -263,8 +263,7 @@ agents = [
         before_install: [
             'yum update -y',
             'yum install -y mercurial subversion openssh-clients bash unzip curl',
-            'yum clean all'
-        ] + yum_install_git29 + install_java
+        ] + yum_install_git29 + install_java + [ 'yum clean all' ]
     },
     {
         distro: 'centos',
@@ -276,8 +275,7 @@ agents = [
         before_install: [
             'yum update -y',
             'yum install -y mercurial subversion openssh-clients bash unzip curl',
-            'yum clean all'
-        ] + yum_install_git29 + install_java
+        ] + yum_install_git29 + install_java + [ 'yum clean all' ]
     },
     {
         distro: 'fedora',
